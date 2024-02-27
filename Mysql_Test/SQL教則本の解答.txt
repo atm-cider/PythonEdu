@@ -1,0 +1,318 @@
+問題1-3
+-- 1
+SELECT * FROM 家計簿 WHERE 入金額 = 50000;
+-- 2
+DELETE FROM 家計簿 WHERE 出金額 > 4000;
+-- 3
+UPDATE 家計簿
+   SET メモ = 'カフェラテを購入'
+ WHERE 日付 = '2024-02-03';
+
+問題2-3
+-- 1
+SELECT コード, 地域, 都道府県名, 県庁所在地, 面積 FROM 都道府県;
+-- 2
+SELECT * FROM 都道府県;
+-- 3
+SELECT 地域 AS area, 都道府県名 AS pref FROM 都道府県;
+
+問題2-4
+-- 1
+INSERT INTO 都道府県(コード, 地域, 都道府県名, 面積) VALUES ('26', '近畿', '京都', 4613 );
+-- 2
+INSERT INTO 都道府県 VALUES ('37', '四国', '香川', '高松', 1876 );
+-- 3
+INSERT INTO 都道府県(コード, 都道府県名, 県庁所在地) VALUES ('40', '福岡', '福岡');
+
+問題2-5
+-- 1
+UPDATE 都道府県 SET 県庁所在地 = '京都'
+ WHERE コード = '26';
+-- 2
+UPDATE 都道府県 SET 地域 = '九州', 面積 = 4976
+ WHERE コード = '40';
+
+問題2-6
+ DELETE FROM 都道府県 WHERE コード = '26'
+
+問題3-1
+-- 1
+SELECT * FROM 気象観測 WHERE 月 = 6;
+-- 2
+SELECT * FROM 気象観測 WHERE 月 <> 6;
+-- 3
+SELECT * FROM 気象観測 WHERE 降水量 < 100;
+-- 4
+SELECT * FROM 気象観測 WHERE 降水量 > 200;
+-- 5
+SELECT * FROM 気象観測 WHERE 最高気温 >= 30;
+-- 6
+SELECT * FROM 気象観測 WHERE 最低気温 <= 0;
+-- 7 INを使う場合
+SELECT * FROM 気象観測 WHERE 月 IN (3, 5, 7);
+-- 7 ORを使う場合
+SELECT * FROM 気象観測
+ WHERE 月 = 3 OR 月 = 5 OR 月 = 7;
+-- 8 NOT INを使う場合
+SELECT * FROM 気象観測 WHERE 月 NOT IN (3, 5, 7);
+-- 8 ANDを使う場合
+SELECT * FROM 気象観測
+ WHERE 月 <> 3 AND 月 <> 5 AND 月 <> 7;
+-- 9
+SELECT * FROM 気象観測
+ WHERE 降水量 <= 100 AND 湿度 < 50;
+-- 10
+SELECT * FROM 気象観測
+ WHERE 最低気温 < 5 OR 最高気温 > 35;
+-- 11 BETWEENを使う場合
+SELECT * FROM 気象観測
+ WHERE 湿度 BETWEEN 60 AND 79;
+-- 11 ANDを使う場合
+SELECT * FROM 気象観測
+ WHERE 湿度 >= 60 AND 湿度 <= 79;
+-- 12
+SELECT * FROM 気象観測
+ WHERE 降水量 IS NULL OR 最高気温 IS NULL
+    OR 最低気温 IS NULL OR 湿度 IS NULL;
+
+問題3-2
+-- 1
+SELECT 都道府県名 FROM 都道府県
+ WHERE 都道府県名 LIKE '%川';
+-- 2
+SELECT 都道府県名 FROM 都道府県
+ WHERE 都道府県名 LIKE '%島%';
+-- 3
+SELECT 都道府県名 FROM 都道府県
+ WHERE 都道府県名 LIKE '愛%';
+-- 4
+SELECT * FROM 都道府県
+ WHERE 都道府県名 = 県庁所在地;
+-- 5
+SELECT * FROM 都道府県
+ WHERE 都道府県名 <> 県庁所在地;
+
+問題3-3
+-- 1
+SELECT * FROM 成績表;
+-- 2
+/* 学籍番号S001の学生 */
+INSERT INTO 成績表
+VALUES ('S001', '織田　信長', 77, 55, 80, 75, 93, NULL);
+/* 学籍番号A002の学生 */
+INSERT INTO 成績表
+VALUES ('A002', '豊臣　秀吉', 64, 69, 70, 0, 59, NULL);
+/* 学籍番号E003の学生 */
+INSERT INTO 成績表
+VALUES ('E003', '徳川　家康', 80, 83, 85, 90, 79, NULL);
+-- 3
+UPDATE 成績表 SET 法学 = 85, 哲学 = 67
+ WHERE 学籍番号 = 'S001';
+-- 4
+UPDATE 成績表 SET 外国語 = 81
+ WHERE 学籍番号 IN ('A002', 'E003');
+-- 5 (1)
+UPDATE 成績表 SET 総合成績 = 'A'
+ WHERE 法学 >= 80 AND 経済学 >= 80 AND 哲学 >= 80
+   AND 情報理論 >= 80 AND 外国語 >= 80;
+-- 5 (2)
+UPDATE 成績表 SET 総合成績 = 'B'
+ WHERE (法学 >= 80 OR 外国語 >= 80)
+   AND (経済学 >= 80 OR 哲学 >= 80)
+   AND 総合成績 IS NULL;
+-- 5 (3)
+UPDATE 成績表 SET 総合成績 = 'D'
+ WHERE 法学 < 50 AND 経済学 < 50 AND 哲学 < 50
+   AND 情報理論 < 50 AND 外国語 < 50
+   AND 総合成績 IS NULL;
+-- 5 (4)
+UPDATE 成績表 SET 総合成績 = 'C'
+ WHERE 総合成績 IS NULL;
+-- 6
+DELETE FROM 成績表
+ WHERE 法学 = 0
+    OR 経済学 = 0
+    OR 哲学 = 0
+    OR 情報理論 = 0
+    OR 外国語 = 0;
+
+問題4-1
+-- 1
+SELECT * FROM 注文履歴 ORDER BY 注文番号, 注文枝番;
+-- 2
+SELECT DISTINCT 商品名 FROM 注文履歴
+ WHERE 日付 >= '2024-01-01' AND 日付 <= '2024-01-31'
+ ORDER BY 商品名;
+-- 3
+SELECT 注文番号, 注文枝番, 注文金額 FROM 注文履歴
+ WHERE 分類 = '1' ORDER BY 注文金額
+OFFSET 1 ROW FETCH NEXT 3 ROWS ONLY;
+-- 4
+SELECT 日付, 商品名, 単価, 数量, 注文金額 FROM 注文履歴
+ WHERE 分類 = '3' AND 数量 >= 2 ORDER BY 日付, 数量 DESC;
+-- 5
+SELECT DISTINCT 分類, 商品名, サイズ, 単価
+  FROM 注文履歴 WHERE 分類 = '1'
+ UNION
+SELECT DISTINCT 分類, 商品名, NULL, 単価
+  FROM 注文履歴 WHERE 分類 = '2'
+ UNION
+SELECT DISTINCT 分類, 商品名, NULL, 単価
+  FROM 注文履歴 WHERE 分類 = '3'
+ ORDER BY 1, 2;
+
+問題4-2
+-- 1
+SELECT 値 FROM 奇数 UNION SELECT 値 FROM 偶数;
+-- 2
+SELECT 値 FROM 整数 EXCEPT SELECT 値 FROM 偶数;
+-- 3
+SELECT 値 FROM 整数 INTERSECT SELECT 値 FROM 偶数;
+-- 4
+SELECT 値 FROM 奇数 INTERSECT SELECT 値 FROM 偶数;
+
+問題5-1
+-- 1 (A)
+UPDATE 試験結果
+   SET 午後1 = (80*4) - (86+68+91)
+ WHERE 受験者ID = 'SW1046';
+-- 1 (B)
+UPDATE 試験結果
+   SET 論述 = (68*4) - (65+53+70)
+ WHERE 受験者ID = 'SW1350';
+-- 1 (C)
+UPDATE 試験結果
+   SET 午前 = (56*4) - (59+56+36)
+ WHERE 受験者ID = 'SW1877';
+-- 2
+SELECT 受験者ID AS 合格者ID
+  FROM 試験結果
+ WHERE 午前 >= 60
+   AND 午後1 + 午後2 >= 120
+   AND 0.3 * (午前 + 午後1 + 午後2) <= 論述;
+
+問題5-2
+-- 1
+UPDATE 回答者
+   SET 国名 = CASE SUBSTRING(TRIM(メールアドレス),
+                            LENGTH(TRIM(メールアドレス))-1, 2)
+             WHEN 'jp' THEN '日本'
+             WHEN 'uk' THEN 'イギリス'
+             WHEN 'cn' THEN '中国'
+             WHEN 'fr' THEN 'フランス'
+             WHEN 'vn' THEN 'ベトナム' END;
+-- 2
+SELECT TRIM(メールアドレス) AS メールアドレス,
+       CASE WHEN 年齢 >= 20 AND 年齢 < 30 THEN '20代'
+            WHEN 年齢 >= 30 AND 年齢 < 40 THEN '30代'
+            WHEN 年齢 >= 40 AND 年齢 < 50 THEN '40代'
+            WHEN 年齢 >= 50 AND 年齢 < 60 THEN '50代' END
+       || '：' ||
+       CASE 住居 WHEN 'D' THEN '戸建て'
+                WHEN 'C' THEN '集合住宅' END AS 属性
+  FROM 回答者;
+
+問題5-3
+-- 1
+UPDATE 受注
+   SET 文字数 = LENGTH(REPLACE(文字,' ', ''));
+-- 2
+SELECT 受注日, 受注ID, 文字数,
+       CASE COALESCE(書体コード, '1')
+           WHEN '1' THEN 'ブロック体'
+           WHEN '2' THEN '筆記体'
+           WHEN '3' THEN '草書体' END AS 書体名,
+       CASE COALESCE(書体コード, '1')
+           WHEN '1' THEN 100
+           WHEN '2' THEN 150
+           WHEN '3' THEN 200  END AS 単価,
+       CASE WHEN 文字数 > 10 THEN 500
+            ELSE 0 END AS 特別加工料
+  FROM 受注 ORDER BY 受注日, 受注ID;
+-- 3
+UPDATE 受注
+   SET 文字 = REPLACE(文字, ' ', '★')
+ WHERE 受注ID = '113';
+
+問題6-1
+-- 1
+SELECT SUM(降水量), AVG(最高気温), AVG(最低気温)
+  FROM 都市別気象観測;
+-- 2
+SELECT SUM(降水量), AVG(最高気温), AVG(最低気温)
+  FROM 都市別気象観測
+ WHERE 都市名 = '東京';
+-- 3
+SELECT 都市名, AVG(降水量), MIN(最高気温), MAX(最低気温)
+  FROM 都市別気象観測
+ GROUP BY 都市名;
+-- 4
+SELECT 月, AVG(降水量), AVG(最高気温), AVG(最低気温)
+  FROM 都市別気象観測
+ GROUP BY 月;
+-- 5
+SELECT 都市名, MAX(最高気温)
+  FROM 都市別気象観測
+ GROUP BY 都市名
+HAVING MAX(最高気温) >= 38;
+-- 6
+SELECT 都市名, MIN(最低気温)
+  FROM 都市別気象観測
+ GROUP BY 都市名
+HAVING MIN(最低気温) <= -10;
+
+問題6-2
+-- 1
+SELECT COUNT(*) AS 社員数
+  FROM 入退室管理
+ WHERE 退室 IS NULL;
+-- 2
+SELECT 社員名, COUNT(*) AS 入室回数
+  FROM 入退室管理
+ GROUP BY 社員名
+ ORDER BY 2 DESC;
+-- 3
+SELECT CASE 事由区分 WHEN '1' THEN 'メンテナンス'
+                    WHEN '2' THEN 'リリース作業'
+                    WHEN '3' THEN '障害対応'
+                    WHEN '9' THEN 'その他'
+       END AS 事由,
+       COUNT(*) AS 入室回数
+  FROM 入退室管理
+ GROUP BY 事由区分;
+-- 4
+SELECT 社員名, COUNT(*) AS 入室回数
+  FROM 入退室管理
+ GROUP BY 社員名
+HAVING COUNT(*) > 10;
+-- 5
+SELECT 日付, COUNT(社員名) AS 対応社員数
+  FROM 入退室管理
+ WHERE 事由区分 = '3'
+ GROUP BY 日付;
+
+問題7-3
+-- 1
+INSERT INTO 頭数集計
+SELECT 飼育県, COUNT(個体識別番号)
+  FROM 個体識別
+ GROUP BY 飼育県;
+
+-- 2
+SELECT 飼育県 AS 都道府県名, 個体識別番号,
+  CASE 雌雄コード WHEN '1' THEN '雄'
+                WHEN '2' THEN '雌' END AS 雌雄
+  FROM 個体識別
+ WHERE 飼育県 IN (SELECT 飼育県 FROM 頭数集計
+                  ORDER BY 頭数 DESC
+                 OFFSET 0 ROWS FETCH NEXT 3 ROWS ONLY);
+
+-- 3
+SELECT 個体識別番号,
+  CASE 品種コード WHEN '01' THEN '乳用種'
+                WHEN '02' THEN '肉用種'
+                WHEN '03' THEN '交雑種' END AS 品種,
+       出生日, 母牛番号
+  FROM 個体識別
+ WHERE 母牛番号 IN (SELECT 個体識別番号 FROM 個体識別
+                    WHERE 品種コード = '01');
